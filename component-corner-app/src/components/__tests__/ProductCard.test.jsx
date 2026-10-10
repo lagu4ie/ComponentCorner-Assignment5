@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi } from 'vitest'
 import ProductCard from '../ProductCard'
@@ -41,4 +41,23 @@ describe('ProductCard Component', () => {
       screen.getByRole('button', { name: /add to cart/i })
     ).toBeInTheDocument()
   })
+it('calls onAddToCart when button is clicked', () => {
+  const mockAddToCart = vi.fn()
+
+  render(
+    <MemoryRouter>
+      <ProductCard
+        {...mockProduct}
+        onAddToCart={mockAddToCart}
+      />
+    </MemoryRouter>
+  )
+
+  fireEvent.click(
+    screen.getByRole('button', { name: /add to cart/i })
+  )
+
+  expect(mockAddToCart).toHaveBeenCalledTimes(1)
+ })
+ 
 })
